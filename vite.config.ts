@@ -8,7 +8,7 @@ export default defineConfig((configEnv) => {
   return {
     plugins: [react()],
     server: {
-      port: 3000,
+      port: 8080,
     },
     test: {
       globals: true,
@@ -30,6 +30,9 @@ export default defineConfig((configEnv) => {
           ? "[name]__[local]__[hash:base64:5]"
           : "[hash:base64:5]",
       },
+    },
+    define: {
+      "process.env": process.env,
     },
   };
 });
