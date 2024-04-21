@@ -20,6 +20,8 @@ export default defineConfig((configEnv) => {
         app: resolve(__dirname, "src", "app"),
         components: resolve(__dirname, "src", "components"),
         hooks: resolve(__dirname, "src", "hooks"),
+        containers: resolve(__dirname, "src", "containers"),
+        pages: resolve(__dirname, "src", "pages"),
       },
     },
     css: {

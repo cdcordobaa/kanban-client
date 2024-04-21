@@ -10,6 +10,8 @@ import {
   useFetchEmployees,
 } from "hooks/fetchEmployee";
 import EmployeeDetails from "components/molecules/employee-details/employee-details";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "containers/home/home";
 
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -61,33 +63,47 @@ function App() {
     handleCloseModal();
   };
   return (
-    <main>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        {modalContent}
-      </Modal>
-      <header className="pt-16 z-10 relative max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <h1 className="text-6xl lg:text-7xl leading-none font-extrabold tracking-tight mb-8 sm:mb-10 text-purple-400">
-          Employee Management
-        </h1>
-      </header>
-      <section className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="sm:flex sm:space-x-6 space-y-4 sm:space-y-0 items-center">
-          <Button onClick={handleOpenModal}>Create Employee</Button>
-        </div>
-      </section>
-      <section className="max-w-screen-lg xl:max-w-screen-xl mx-auto grid grid-cols-10 gap-4">
-        {/* {employees.map((employee, index) => (
-          <div key={index} className="col-span-10 sm:col-span-5">
-            <Card
-              employee={employee}
-              onEmployeesChange={onEmployeesChange}
-              onOpenDetails={() => handleOpenDetailsModal(employee)}
-            />
-          </div>
-        ))} */}
-      </section>
-    </main>
+    <BrowserRouter>
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/board"
+            element={
+              <>
+                <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                  {modalContent}
+                </Modal>
+                <header className="pt-16 z-10 relative max-w-screen-lg xl:max-w-screen-xl mx-auto">
+                  <h1 className="text-6xl lg:text-7xl leading-none font-extrabold tracking-tight mb-8 sm:mb-10 text-purple-400">
+                    Employee Management
+                  </h1>
+                </header>
+                <section className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
+                  <div className="sm:flex sm:space-x-6 space-y-4 sm:space-y-0 items-center">
+                    <Button onClick={handleOpenModal}>Create Employee</Button>
+                  </div>
+                </section>
+                <section className="max-w-screen-lg xl:max-w-screen-xl mx-auto grid grid-cols-10 gap-4">
+                  {/* {employees.map((employee, index) => (
+                  <div key={index} className="col-span-10 sm:col-span-5">
+                    <Card
+                      employee={employee}
+                      onEmployeesChange={onEmployeesChange}
+                      onOpenDetails={() => handleOpenDetailsModal(employee)}
+                    />
+                  </div>
+                ))} */}
+                </section>
+              </>
+            }
+          />
+          {/* Add more routes as needed */}
+        </Routes>
+      </main>
+    </BrowserRouter>
   );
 }
 
 export default App;
+
