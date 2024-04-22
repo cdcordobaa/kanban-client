@@ -91,7 +91,8 @@ const Board: React.FC = () => {
 
   const handleDeleteTask = async (taskId: string) => {
     await deleteTask(taskId);
-    await refetch(); 
+    await refetch();
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading tasks</div>;
