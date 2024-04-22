@@ -30,10 +30,22 @@ const Column: React.FC<ColumnProps> = ({
     },
   }));
   const [isCreating, setIsCreating] = useState(false);
+  const columnColors = {
+    todo: "bg-red-400",
+    inProgress: "bg-yellow-400",
+    done: "bg-green-400",
+  } as const;
+  const columnColor =
+    columnColors[columnId as keyof typeof columnColors] || "bg-gray-400";
 
   return (
-    <div ref={drop} className="bg-gray-100 p-4 w-1/3 rounded">
-      <h2 className="font-bold text-lg capitalize">{columnId}</h2>
+    <div
+      ref={drop}
+      className={`flex flex-col rounded-lg shadow overflow-hidden w-full  m-2 ${columnColor} p-2`}
+    >
+      <h2 className="text-white text-lg font-bold p-4 capitalize">
+        {columnId}
+      </h2>
       {tasks.map((task, index) => (
         <TaskCardDrag
           key={task.id}
@@ -46,7 +58,16 @@ const Column: React.FC<ColumnProps> = ({
       {isCreating && (
         <CreateTaskInput onCreate={(title) => onCreateTask(title, columnId)} />
       )}
-      <button onClick={() => setIsCreating(!isCreating)}>Add Task</button>
+      <button
+        onClick={() => setIsCreating(!isCreating)}
+        className={`mt-4 py-2 px-4 rounded-lg font-bold text-white transition-colors duration-150 ${
+          isCreating
+            ? "bg-blue-500 hover:bg-blue-700"
+            : "bg-green-500 hover:bg-green-700"
+        }`}
+      >
+        {isCreating ? "Saving..." : "Add Task"}
+      </button>
     </div>
   );
 };

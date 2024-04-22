@@ -95,17 +95,19 @@ const Board: React.FC = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex space-x-4">
-        {Object.keys(columns).map((columnId) => (
-          <Column
-            key={columnId}
-            columnId={columnId}
-            tasks={columns[columnId]}
-            onDropTask={onDropTask}
-            onCreateTask={handleCreateTask}
-            onDeleteTask={handleDeleteTask}
-          />
-        ))}
+      <div className="flex justify-center items-start p-2 ">
+        <div className="flex justify-center items-start max-w-6xl mx-auto">
+          {Object.keys(columns).map((columnId) => (
+            <Column
+              key={columnId}
+              columnId={columnId}
+              tasks={columns[columnId as keyof typeof columns]}
+              onDropTask={onDropTask}
+              onCreateTask={handleCreateTask}
+              onDeleteTask={handleDeleteTask}
+            />
+          ))}
+        </div>
       </div>
     </DndProvider>
   );

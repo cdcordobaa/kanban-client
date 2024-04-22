@@ -14,10 +14,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   };
 
   return (
-    <div
-      className="bg-white p-4 rounded shadow mb-2 cursor-pointer"
-      onClick={handleClick}
-    >
+    <div className="bg-white  cursor-pointer" onClick={handleClick}>
       <h3 className="text-lg font-semibold">{task.title}</h3>
       <p className="text-sm">{task.description}</p>
     </div>
