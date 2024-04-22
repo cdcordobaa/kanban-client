@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import {
   useFetchTaskDetails,
   useFetchUserDetails,
@@ -82,6 +83,21 @@ const TaskDetails: React.FC = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="max-w-4xl w-full bg-white shadow-xl rounded-lg overflow-hidden p-6 space-y-4 border border-gray-200">
+        <div className="flex justify-between items-center">
+          <Link
+            to={`/board/${task?.boardId}`}
+            className="inline-flex items-center text-blue-500 hover:text-blue-700 transition duration-300"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2" />
+            Back to Board
+          </Link>
+          <img
+            src={placeholderImageUrl}
+            alt="User"
+            className="w-10 h-10 rounded-full"
+          />
+        </div>
+
         {task ? (
           <>
             <div className="flex justify-between items-center">
@@ -95,11 +111,6 @@ const TaskDetails: React.FC = () => {
               ) : (
                 <h1 className="font-bold text-xl">{task.title}</h1>
               )}
-              <img
-                src={placeholderImageUrl}
-                alt="User"
-                className="w-10 h-10 rounded-full"
-              />
             </div>
 
             {isEditing ? (
