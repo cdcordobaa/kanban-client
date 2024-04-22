@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { Board } from "src/types/board";
-import { User } from "src/types/employe";
+import { Board } from "types/board";
+import { User } from "types/user";
 
-const API_URL = "http://localhost:3001/api/v1/users";
+const API_URL = "http://localhost:3000/dev/users";
 type ApiResponse = {
   data: User[];
   hasNextPage: boolean;

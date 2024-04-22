@@ -101,9 +101,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
         <p>
           <strong>Address:</strong> {user?.address}
         </p>
-        <p>
-          <strong>Hire Date:</strong> {user?.hireDate}
-        </p>
         <hr />
         <div>
           <label htmlFor="board" className="block text-l font-bold text-center">
