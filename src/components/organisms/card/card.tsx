@@ -1,7 +1,7 @@
-import { useDeleteEmployee } from "hooks/fetchEmployee";
+import { useDeleteUser } from "hooks/fetchUser";
 import React from "react";
 import { forwardRef, ComponentProps } from "react";
-import { Employee } from "src/types/employe";
+import { User } from "src/types/employe";
 
 function formatDate(dateString: string): string {
   const options: Intl.DateTimeFormatOptions = {
@@ -24,23 +24,23 @@ function calculateDuration(startDate: string): string {
 }
 export interface CardProps
   extends Omit<ComponentProps<"div">, "className" | "children"> {
-  employee: Employee;
+  user: User;
   onOpenDetails: () => void;
-  onEmployeesChange?: () => void;
+  onUsersChange?: () => void;
 }
 const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ employee, onOpenDetails, onEmployeesChange, ...rest }, ref) => {
-    const hireDateFormatted = formatDate(employee.hireDate);
-    const timeInCompany = calculateDuration(employee.hireDate);
+  ({ user, onOpenDetails, onUsersChange, ...rest }, ref) => {
+    const hireDateFormatted = formatDate(user.hireDate);
+    const timeInCompany = calculateDuration(user.hireDate);
 
-    const { deleteEmployee } = useDeleteEmployee();
+    const { deleteUser } = useDeleteUser();
 
     const handleDelete = async (id: number) => {
       try {
-        await deleteEmployee(id);
-        onEmployeesChange?.();
+        await deleteUser(id);
+        onUsersChange?.();
       } catch (error) {
-        console.error("Failed to delete employee:", error);
+        console.error("Failed to delete user:", error);
       }
     };
     return (
@@ -51,10 +51,10 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       >
         <img
           src={
-            employee.imageUrl ||
+            user.imageUrl ||
             "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
           }
-          alt={`${employee.firstName} ${employee.lastName}`}
+          alt={`${user.firstName} ${user.lastName}`}
           className="w-16 h-16 bg-gray-300 rounded-full mr-4"
           onError={(e) => {
             e.currentTarget.src = "default-placeholder-image-url";
@@ -62,8 +62,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         />
 
         <div className="flex-1">
-          <h3 className="text-2xl font-bold text-blue-500">{`${employee.firstName} ${employee.lastName}`}</h3>
-          <p className="text-sm text-gray-500">{employee.department?.name}</p>
+          <h3 className="text-2xl font-bold text-blue-500">{`${user.firstName} ${user.lastName}`}</h3>
+          <p className="text-sm text-gray-500">{user.board?.name}</p>
           <p className="text-base text-gray-500">{`Hire Date: ${hireDateFormatted} `}</p>
           <p className="text-base text-gray-500">{`Time in The Company: (${timeInCompany}) `}</p>
         </div>
@@ -76,7 +76,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
             View Details
           </button>
           <button
-            onClick={() => handleDelete(employee.id)}
+            onClick={() => handleDelete(user.id)}
             className="px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-600"
           >
             X

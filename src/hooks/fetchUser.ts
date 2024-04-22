@@ -1,27 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
-import { Department } from "src/types/department";
-import { Employee } from "src/types/employe";
+import { Board } from "src/types/board";
+import { User } from "src/types/employe";
 
-const API_URL = "http://localhost:3001/api/v1/employees";
+const API_URL = "http://localhost:3001/api/v1/users";
 type ApiResponse = {
-  data: Employee[];
+  data: User[];
   hasNextPage: boolean;
 };
-type DepartmentApiResponse = Department[];
+type BoardApiResponse = Board[];
 
-const useFetchEmployees = () => {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+const useFetchUsers = () => {
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchEmployees = async () => {
+  const fetchUsers = async () => {
     setLoading(true);
     try {
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error("Network response was not ok");
       const res: ApiResponse = await response.json();
       console.log(res.data);
-      setEmployees(res.data);
+      setUsers(res.data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("An error occurred"));
     } finally {
@@ -30,24 +30,24 @@ const useFetchEmployees = () => {
   };
 
   useEffect(() => {
-    fetchEmployees();
+    fetchUsers();
   }, []);
 
-  return { employees, loading, error, refetch: fetchEmployees };
+  return { users, loading, error, refetch: fetchUsers };
 };
 
-const useFetchEmployee = (id: number) => {
-  const [employee, setEmployee] = useState<Employee | null>(null);
+const useFetchUser = (id: number) => {
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchEmployee = useCallback(async () => {
+  const fetchUser = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/${id}`);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
-      setEmployee(data);
+      setUser(data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("An error occurred"));
     } finally {
@@ -56,76 +56,73 @@ const useFetchEmployee = (id: number) => {
   }, [id]);
 
   useEffect(() => {
-    fetchEmployee();
-  }, [fetchEmployee]);
+    fetchUser();
+  }, [fetchUser]);
 
-  return { employee, loading, error, refetch: fetchEmployee };
+  return { user, loading, error, refetch: fetchUser };
 };
 
-const useCreateEmployee = () => {
-  const createEmployee = async (employeeData: Partial<Employee>) => {
+const useCreateUser = () => {
+  const createUser = async (userData: Partial<User>) => {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(employeeData),
+      body: JSON.stringify(userData),
     });
-    if (!response.ok) throw new Error("Failed to create employee");
+    if (!response.ok) throw new Error("Failed to create user");
     return await response.json();
   };
 
-  return { createEmployee };
+  return { createUser };
 };
 
-const useUpdateEmployee = () => {
-  const updateEmployee = async (
-    id: number,
-    employeeData: Partial<Employee>
-  ) => {
+const useUpdateUser = () => {
+  const updateUser = async (id: number, userData: Partial<User>) => {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(employeeData),
+      body: JSON.stringify(userData),
     });
-    if (!response.ok) throw new Error("Failed to update employee");
+    if (!response.ok) throw new Error("Failed to update user");
     return await response.json();
   };
 
-  return { updateEmployee };
+  return { updateUser };
 };
 
-const useDeleteEmployee = () => {
-  const deleteEmployee = async (id: number) => {
+const useDeleteUser = () => {
+  const deleteUser = async (id: number) => {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",
     });
-    if (!response.ok) throw new Error("Failed to delete employee");
+    if (!response.ok) throw new Error("Failed to delete user");
     return true;
   };
 
-  return { deleteEmployee };
+  return { deleteUser };
 };
 
-const useFetchDepartments = () => {
-  const [departments, setDepartments] = useState<Department[]>([]);
+const useFetchBoards = () => {
+  const [boards, setBoards] = useState<Board[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchDepartments = async () => {
+  const fetchBoards = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/departments`);
+      const response = await fetch(`${API_URL}/boards`);
       if (!response.ok) throw new Error("Network response was not ok");
-      const data: DepartmentApiResponse = await response.json();
-      setDepartments(data);
+      const data: BoardApiResponse = await response.json();
+      setBoards(data);
     } catch (err) {
       setError(
         err instanceof Error
           ? err
-          : new Error("An error occurred fetching departments")
+          : new Error("An error occurred fetching boards")
       );
     } finally {
       setLoading(false);
@@ -133,17 +130,17 @@ const useFetchDepartments = () => {
   };
 
   useEffect(() => {
-    fetchDepartments();
+    fetchBoards();
   }, []);
 
-  return { departments, loading, error, refetch: fetchDepartments };
+  return { boards, loading, error, refetch: fetchBoards };
 };
 
 export {
-  useFetchEmployees,
-  useFetchEmployee,
-  useCreateEmployee,
-  useUpdateEmployee,
-  useDeleteEmployee,
-  useFetchDepartments,
+  useFetchUsers,
+  useFetchUser,
+  useCreateUser,
+  useUpdateUser,
+  useDeleteUser,
+  useFetchBoards,
 };

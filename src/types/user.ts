@@ -1,4 +1,4 @@
-import { Department } from "./department";
+import { Board } from "./board";
 
 export type User = {
   isActive: boolean;
@@ -8,7 +8,7 @@ export type User = {
   email: string;
   firstName: string;
   lastName: string;
-  department?: Department;
+  board?: Board;
   phone: string;
   address: string;
 };

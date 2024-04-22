@@ -1,5 +1,5 @@
 import React from "react";
-import { Task } from "../../../types/task";
+import { Task } from "types/task";
 import { useNavigate } from "react-router-dom";
 
 interface TaskCardProps {

@@ -1,52 +1,52 @@
-import { useFetchEmployee, useUpdateEmployee } from "hooks/fetchEmployee";
+import { useFetchUser, useUpdateUser } from "hooks/fetchUser";
 import React, { useEffect } from "react";
-import { Department } from "src/types/department";
+import { Board } from "types/board";
 
-interface EmployeeDetailsProps {
-  employeeId: number;
-  departments: Department[];
+interface UserDetailsProps {
+  userId: number;
+  boards: Board[];
   onClose: () => void;
 }
 
-const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
-  employeeId,
-  departments,
+const UserDetails: React.FC<UserDetailsProps> = ({
+  userId,
+  boards,
   onClose,
 }) => {
-  const { employee, loading, error, refetch } = useFetchEmployee(employeeId);
-  const { updateEmployee } = useUpdateEmployee();
+  const { user, loading, error, refetch } = useFetchUser(userId);
+  const { updateUser } = useUpdateUser();
 
-  const [selectedDepartment, setSelectedDepartment] = React.useState(
-    employee?.department?.id || departments[0].id
+  const [selectedBoard, setSelectedBoard] = React.useState(
+    user?.board?.id || boards[0].id
   );
-  const [isActive, setIsActive] = React.useState(employee?.isActive || false);
+  const [isActive, setIsActive] = React.useState(user?.isActive || false);
 
   useEffect(() => {
-    if (employee) {
-      setSelectedDepartment(employee?.department?.id || 0);
-      setIsActive(employee?.isActive || false);
+    if (user) {
+      setSelectedBoard(user?.board?.id || 0);
+      setIsActive(user?.isActive || false);
     }
-  }, [employee]);
+  }, [user]);
 
   useEffect(() => {
-    if (isActive !== undefined && employee) {
+    if (isActive !== undefined && user) {
       handleUpdate();
     }
   }, [isActive]);
 
   const handleUpdate = async () => {
-    if (selectedDepartment !== undefined && isActive !== undefined) {
-      await updateEmployee(employeeId, {
-        ...employee,
-        department: departments.find((d) => d.id === selectedDepartment),
+    if (selectedBoard !== undefined && isActive !== undefined) {
+      await updateUser(userId, {
+        ...user,
+        board: boards.find((d) => d.id === selectedBoard),
         isActive,
       });
       refetch();
     }
   };
 
-  const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDepartment(Number(e.target.value));
+  const handleBoardChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedBoard(Number(e.target.value));
     handleUpdate();
   };
 
@@ -73,10 +73,10 @@ const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
           )}
           <img
             src={
-              employee?.imageUrl ||
+              user?.imageUrl ||
               "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
             }
-            alt={`${employee?.firstName} ${employee?.lastName}`}
+            alt={`${user?.firstName} ${user?.lastName}`}
             className="w-30 h-30 bg-gray-300 rounded-full mr-4"
             onError={(e) => {
               e.currentTarget.src = "default-placeholder-image-url";
@@ -84,43 +84,40 @@ const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
           />
         </div>
         <h3 className="text-2xl font-bold">
-          {employee?.firstName} {employee?.lastName}
+          {user?.firstName} {user?.lastName}
         </h3>
       </div>
       <div className="flex-1 space-y-4 p-4">
         <hr />
         <p>
-          <strong>Employee ID:</strong> {employee?.id}
+          <strong>User ID:</strong> {user?.id}
         </p>
         <p>
-          <strong>Department:</strong> {employee?.department?.name}
+          <strong>Board:</strong> {user?.board?.name}
         </p>
         <p>
-          <strong>Telephone:</strong> {employee?.phone}
+          <strong>Telephone:</strong> {user?.phone}
         </p>
         <p>
-          <strong>Address:</strong> {employee?.address}
+          <strong>Address:</strong> {user?.address}
         </p>
         <p>
-          <strong>Hire Date:</strong> {employee?.hireDate}
+          <strong>Hire Date:</strong> {user?.hireDate}
         </p>
         <hr />
         <div>
-          <label
-            htmlFor="department"
-            className="block text-l font-bold text-center"
-          >
-            Update Department
+          <label htmlFor="board" className="block text-l font-bold text-center">
+            Update Board
           </label>
           <select
-            id="department"
-            value={selectedDepartment}
-            onChange={handleDepartmentChange}
+            id="board"
+            value={selectedBoard}
+            onChange={handleBoardChange}
             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none sm:text-sm rounded-md"
           >
-            {departments.map((department) => (
-              <option key={department.id} value={department.id}>
-                {department.name}
+            {boards.map((board) => (
+              <option key={board.id} value={board.id}>
+                {board.name}
               </option>
             ))}
           </select>
@@ -141,4 +138,4 @@ const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
   );
 };
 
-export default EmployeeDetails;
+export default UserDetails;

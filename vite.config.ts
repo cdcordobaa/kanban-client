@@ -22,6 +22,7 @@ export default defineConfig((configEnv) => {
         hooks: resolve(__dirname, "src", "hooks"),
         containers: resolve(__dirname, "src", "containers"),
         pages: resolve(__dirname, "src", "pages"),
+        types: resolve(__dirname, "src", "types"),
       },
     },
     css: {

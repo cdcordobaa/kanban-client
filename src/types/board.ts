@@ -1,4 +1,4 @@
-export interface Department {
+export interface Board {
   id?: number;
   name: string;
 }

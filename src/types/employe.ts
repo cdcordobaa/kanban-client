@@ -1,13 +1,13 @@
-import { Department } from "./department";
+import { Board } from "./board";
 
-export type Employee = {
+export type User = {
   isActive: boolean;
   imageUrl: string;
   id: number;
   firstName: string;
   lastName: string;
   hireDate: string;
-  department?: Department;
+  board?: Board;
   phone: string;
   address: string;
 };

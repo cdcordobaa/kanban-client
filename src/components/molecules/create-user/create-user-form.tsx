@@ -1,63 +1,61 @@
 import Button from "components/atoms/button";
 import React, { useEffect, useState } from "react";
-import { Department } from "src/types/department";
-import { Employee } from "src/types/employe";
+import { Board } from "types/board";
+import { User } from "types/employe";
 
-interface CreateEmployeeFormProps {
-  onSubmit: (employeeData: Partial<Employee>) => void;
-  departments: Department[];
+interface CreateUserFormProps {
+  onSubmit: (userData: Partial<User>) => void;
+  boards: Board[];
 }
 
-const CreateEmployeeForm: React.FC<CreateEmployeeFormProps> = ({
+const CreateUserForm: React.FC<CreateUserFormProps> = ({
   onSubmit,
-  departments,
+  boards,
 }) => {
-  const [selectedDepartment, setSelectedDepartment] = useState<string>("");
-  const [newDepartmentName, setNewDepartmentName] = useState<string>("");
-  const [employeeData, setEmployeeData] = useState<Partial<Employee>>({
+  const [selectedBoard, setSelectedBoard] = useState<string>("");
+  const [newBoardName, setNewBoardName] = useState<string>("");
+  const [userData, setUserData] = useState<Partial<User>>({
     isActive: true,
   });
 
   useEffect(() => {
-    if (selectedDepartment === "new-department") {
-      setEmployeeData((prev) => ({
+    if (selectedBoard === "new-board") {
+      setUserData((prev) => ({
         ...prev,
-        department: { name: newDepartmentName },
+        board: { name: newBoardName },
       }));
     } else {
-      const department = departments.find(
-        (dept) => dept?.id?.toString() === selectedDepartment
+      const board = boards.find(
+        (dept) => dept?.id?.toString() === selectedBoard
       );
-      if (department) {
-        setEmployeeData((prev) => ({ ...prev, department }));
+      if (board) {
+        setUserData((prev) => ({ ...prev, board }));
       }
     }
-  }, [selectedDepartment, newDepartmentName, departments]);
+  }, [selectedBoard, newBoardName, boards]);
 
-  const handleDepartmentChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleBoardChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
-    setSelectedDepartment(value);
+    setSelectedBoard(value);
 
-    if (value !== "new-department") {
-      setNewDepartmentName("");
+    if (value !== "new-board") {
+      setNewBoardName("");
     }
   };
 
-  const handleNewDepartmentNameChange = (
+  const handleNewBoardNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setNewDepartmentName(event.target.value);
+    setNewBoardName(event.target.value);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onSubmit(employeeData);
+    onSubmit(userData);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setEmployeeData((prev) => ({ ...prev, [name]: value }));
+    setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -77,7 +75,7 @@ const CreateEmployeeForm: React.FC<CreateEmployeeFormProps> = ({
           id="firstName"
           name="firstName"
           placeholder="First Name"
-          value={employeeData.firstName}
+          value={userData.firstName}
           onChange={handleChange}
           className="mt-1 p-2 border border-gray-300 rounded-lg"
         />
@@ -91,7 +89,7 @@ const CreateEmployeeForm: React.FC<CreateEmployeeFormProps> = ({
           id="lastName"
           name="lastName"
           placeholder="Last Name"
-          value={employeeData.lastName}
+          value={userData.lastName}
           onChange={handleChange}
           className="mt-1 p-2 border border-gray-300 rounded-lg"
         />
@@ -106,7 +104,7 @@ const CreateEmployeeForm: React.FC<CreateEmployeeFormProps> = ({
           id="phone"
           name="phone"
           placeholder="555-555-5555"
-          value={employeeData.phone}
+          value={userData.phone}
           onChange={handleChange}
           className="mt-1 p-2 border border-gray-300 rounded-lg"
         />
@@ -121,7 +119,7 @@ const CreateEmployeeForm: React.FC<CreateEmployeeFormProps> = ({
           id="address"
           name="address"
           placeholder="123 Main St"
-          value={employeeData.address}
+          value={userData.address}
           onChange={handleChange}
           className="mt-1 p-2 border border-gray-300 rounded-lg"
         />
@@ -135,39 +133,36 @@ const CreateEmployeeForm: React.FC<CreateEmployeeFormProps> = ({
           type="date"
           id="hireDate"
           name="hireDate"
-          value={employeeData.hireDate}
+          value={userData.hireDate}
           onChange={handleChange}
           className="mt-1 p-2 border border-gray-300 rounded-lg"
         />
       </div>
 
       <div className="flex flex-col">
-        <label
-          htmlFor="department"
-          className="text-sm font-medium text-gray-200"
-        >
-          Department
+        <label htmlFor="board" className="text-sm font-medium text-gray-200">
+          Board
         </label>
         <select
-          id="department"
-          value={selectedDepartment}
-          onChange={handleDepartmentChange}
+          id="board"
+          value={selectedBoard}
+          onChange={handleBoardChange}
           className="mt-1 p-2 border border-gray-300 rounded-lg"
         >
-          {departments.map((dept) => (
+          {boards.map((dept) => (
             <option key={dept.id} value={dept.id}>
               {dept.name}
             </option>
           ))}
-          <option value="new-department">Add New Department</option>
+          <option value="new-board">Add New Board</option>
         </select>
 
-        {selectedDepartment === "new-department" && (
+        {selectedBoard === "new-board" && (
           <input
             type="text"
-            placeholder="New Department Name"
-            value={newDepartmentName}
-            onChange={handleNewDepartmentNameChange}
+            placeholder="New Board Name"
+            value={newBoardName}
+            onChange={handleNewBoardNameChange}
             className="mt-1 p-2 border border-gray-300 rounded-lg"
           />
         )}
@@ -180,4 +175,4 @@ const CreateEmployeeForm: React.FC<CreateEmployeeFormProps> = ({
   );
 };
 
-export default CreateEmployeeForm;
+export default CreateUserForm;
