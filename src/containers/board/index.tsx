@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useTasks } from "../../hooks/service/fetchTasks";
@@ -63,49 +63,68 @@ const Board: React.FC = () => {
     done: [] as Task[],
   };
 
-  const [columns, setColumns] = useState(mockTasks);
+  const [columns, setColumns] = useState(initialColumns);
+  const columnsRef = useRef(columns);
 
-  //   useEffect(() => {
-  //     console.log("Updating columns based on tasks", tasks);
-  //     setColumns({
-  //       todo: tasks.filter((task) => task.status === "Todo"),
-  //       inProgress: tasks.filter((task) => task.status === "In Progress"),
-  //       done: tasks.filter((task) => task.status === "Done"),
-  //     });
-  //   }, [tasks]); // Dependency array, re-run this effect when `tasks` changes
+  useEffect(() => {
+    console.log("Updating columns based on tasks", tasks);
+    setColumns({
+      todo: tasks.filter((task) => task.status === "Todo"),
+      inProgress: tasks.filter((task) => task.status === "In Progress"),
+      done: tasks.filter((task) => task.status === "Done"),
+    });
+  }, [tasks]);
 
-  const onDropTask = (taskId: string, newStatus: string) => {
-    const newColumns = { ...columns };
+  useEffect(() => {
+    columnsRef.current = columns;
+  }, [columns]);
 
-    let movedTask: Task | null = null;
-    let sourceColumnKey: string | null = null;
+  useEffect(() => {
+    console.log("Columns updated", columns);
+  }, [columns]);
 
-    // Find the task and its current column
-    Object.entries(newColumns).forEach(([key, tasks]) => {
-      const taskIndex = tasks.findIndex((task) => task.id === taskId);
-      if (taskIndex !== -1) {
-        movedTask = tasks[taskIndex];
-        sourceColumnKey = key;
-        // If the task is being moved to a different column, remove it from its current column
-        if (key !== newStatus) {
-          tasks.splice(taskIndex, 1);
+  const onDropTask = useCallback(
+    (taskId: string, newStatus: string) => {
+      const newColumns = { ...columnsRef.current };
+      console.log("Tacol", newColumns);
+
+      let movedTask: Task | null = null;
+      let sourceColumnKey: string | null = null;
+
+      // Find the task and its current column
+      Object.entries(newColumns).forEach(([key, tasks]) => {
+        const taskIndex = tasks.findIndex((task) => task.id === taskId);
+        if (taskIndex !== -1) {
+          movedTask = tasks[taskIndex];
+          sourceColumnKey = key;
+          // If the task is being moved to a different column, remove it from its current column
+          if (key !== newStatus) {
+            tasks.splice(taskIndex, 1);
+          }
+        }
+      });
+
+      // Ensure the task is not null and add it to the new column if it's not already there
+      if (movedTask) {
+        // Update the task's status
+        movedTask.status = newStatus;
+        // If the task was moved to a different column or removed from its original column, add it to the new column
+        if (!newColumns[newStatus].includes(movedTask)) {
+          newColumns[newStatus].push(movedTask);
         }
       }
-    });
-
-    // Ensure the task is not null and add it to the new column if it's not already there
-    if (movedTask) {
-      // Update the task's status
-      movedTask.status = newStatus;
-      // If the task was moved to a different column or removed from its original column, add it to the new column
-      if (!newColumns[newStatus].includes(movedTask)) {
-        newColumns[newStatus].push(movedTask);
-      }
-    }
-
-    // Update the state with the new columns
-    setColumns(newColumns);
-  };
+      console.log(
+        "Task moved",
+        movedTask,
+        sourceColumnKey,
+        newStatus,
+        newColumns
+      );
+      // Update the state with the new columns
+      setColumns(newColumns);
+    },
+    [columnsRef]
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading tasks</div>;
