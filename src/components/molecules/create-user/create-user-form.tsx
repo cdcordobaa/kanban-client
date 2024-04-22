@@ -1,7 +1,7 @@
 import Button from "components/atoms/button";
 import React, { useEffect, useState } from "react";
 import { Board } from "types/board";
-import { User } from "types/employe";
+import { User } from "types/user-board";
 
 interface CreateUserFormProps {
   onSubmit: (userData: Partial<User>) => void;

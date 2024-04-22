@@ -1,17 +1,13 @@
 import axios from "axios";
-
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3000/dev";
+import { awsConf } from "./amplify";
 
 const api = axios.create({
-  baseURL: API_URL,
-  // Add more configuration as needed
+  baseURL: awsConf.apiGateway.URL,
 });
 
-// Example function to add authentication token
 api.interceptors.request.use(async (config) => {
-  if (process.env.NODE_ENV === "production") {
-    // Integrate AWS Cognito here to get the token
-    const token = "your_token_from_cognito";
+  const token = localStorage.getItem("accessToken");
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;

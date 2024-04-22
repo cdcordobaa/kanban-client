@@ -1,4 +1,4 @@
-import { useFetchUser, useUpdateUser } from "hooks/fetchUser";
+import { useFetchUser, useUpdateUser } from "hooks/service/fetchUser";
 import React, { useEffect } from "react";
 import { Board } from "types/board";
 

@@ -1,36 +1,39 @@
+import React, { useContext } from "react"; // Import useContext
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Board from "../containers/board";
 import BoardGallery from "../containers/board-gallery";
 import TaskDetails from "../containers/task-details";
 import Login from "../containers/login";
+import { ProvideAuth, AuthContext } from "../hooks/business/auth"; // Import AuthContext
 
-const isLoggedIn = () => {
-  return false;
+const App: React.FC = () => {
+  return (
+    <ProvideAuth>
+      <BrowserRouter>
+        <main>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <AuthCheck>
+                  <Navigate to="/board-gallery" />
+                </AuthCheck>
+              }
+            />
+            <Route path="/board-gallery" element={<BoardGallery />} />
+            <Route path="/board/:boardId" element={<Board />} />
+            <Route path="/task/:taskId" element={<TaskDetails />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
+    </ProvideAuth>
+  );
 };
 
-function App() {
-  return (
-    <BrowserRouter>
-      <main>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              isLoggedIn() ? (
-                <Navigate to="/board-gallery" />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route path="/board-gallery" element={<BoardGallery />} />
-          <Route path="/board/:boardId" element={<Board />} />
-          <Route path="/task/:taskId" element={<TaskDetails />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </main>
-    </BrowserRouter>
-  );
-}
+const AuthCheck: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { accessToken } = useContext(AuthContext);
+  return !!accessToken ? children : <Navigate to="/login" />;
+};
 
 export default App;

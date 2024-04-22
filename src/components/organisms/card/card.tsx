@@ -1,7 +1,7 @@
-import { useDeleteUser } from "hooks/fetchUser";
+import { useDeleteUser } from "hooks/service/fetchUser";
 import React from "react";
 import { forwardRef, ComponentProps } from "react";
-import { User } from "src/types/employe";
+import { User } from "types/user-board";
 
 function formatDate(dateString: string): string {
   const options: Intl.DateTimeFormatOptions = {

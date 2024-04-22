@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
+import { awsConf } from "src/config/amplify";
 import { Board } from "types/board";
 import { User } from "types/user";
 
-const API_URL = "http://localhost:3000/dev/users";
+const USER_API_URL = `${awsConf.apiGateway.URL}/users`;
+
 type ApiResponse = {
   data: User[];
   hasNextPage: boolean;
@@ -17,10 +19,9 @@ const useFetchUsers = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await fetch(API_URL);
+      const response = await fetch(USER_API_URL);
       if (!response.ok) throw new Error("Network response was not ok");
       const res: ApiResponse = await response.json();
-      console.log(res.data);
       setUsers(res.data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("An error occurred"));
@@ -44,7 +45,7 @@ const useFetchUser = (id: number) => {
   const fetchUser = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/${id}`);
+      const response = await fetch(`${USER_API_URL}/${id}`);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setUser(data);
@@ -64,7 +65,7 @@ const useFetchUser = (id: number) => {
 
 const useCreateUser = () => {
   const createUser = async (userData: Partial<User>) => {
-    const response = await fetch(API_URL, {
+    const response = await fetch(USER_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +81,7 @@ const useCreateUser = () => {
 
 const useUpdateUser = () => {
   const updateUser = async (id: number, userData: Partial<User>) => {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${USER_API_URL}/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -96,7 +97,7 @@ const useUpdateUser = () => {
 
 const useDeleteUser = () => {
   const deleteUser = async (id: number) => {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${USER_API_URL}/${id}`, {
       method: "DELETE",
     });
     if (!response.ok) throw new Error("Failed to delete user");
@@ -114,7 +115,7 @@ const useFetchBoards = () => {
   const fetchBoards = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/boards`);
+      const response = await fetch(`${USER_API_URL}/boards`);
       if (!response.ok) throw new Error("Network response was not ok");
       const data: BoardApiResponse = await response.json();
       setBoards(data);
