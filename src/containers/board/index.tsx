@@ -7,10 +7,12 @@ import {
   useFetchTasks,
   useUpdateTask,
 } from "../../hooks/service/fetchTasks";
+import { useAuth } from "../../hooks/business/auth";
 import { Task } from "../../types/task";
 import Column from "../../components/organisms/board-column/column";
 import { statusMappingService } from "../../types/status";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 const Board: React.FC = () => {
   const { boardId } = useParams<{ boardId: string }>();
@@ -18,6 +20,7 @@ const Board: React.FC = () => {
   const { updateTask } = useUpdateTask();
   const { createTask } = useCreateTask();
   const { deleteTask } = useDeleteTask();
+  const { user } = useAuth();
 
   const initialColumns = {
     todo: [] as Task[],
@@ -78,19 +81,17 @@ const Board: React.FC = () => {
         title,
         status: statusMappingService[columnId],
         description: "",
-        userId: "defaultUserId",
+        userId: user?.userId || "defaultUserId",
       };
       await createTask(newTask);
       await refetch();
-      // Optionally refresh tasks list here or add the new task to the state directly
     },
-    [createTask, refetch]
+    [createTask, refetch, user]
   );
 
   const handleDeleteTask = async (taskId: string) => {
     await deleteTask(taskId);
-    await refetch(); // Refetch tasks list after deletion
-  };
+    await refetch(); 
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading tasks</div>;
@@ -98,7 +99,14 @@ const Board: React.FC = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex justify-center items-start p-2 ">
-        <div className="flex justify-center items-start max-w-6xl mx-auto">
+        <Link
+          to="/board-gallery"
+          className="inline-flex items-center text-blue-500 hover:text-blue-700 transition duration-300 mb-4"
+        >
+          <ArrowLeftIcon className="h-5 w-5 mr-2" />
+          Back to Board Gallery
+        </Link>
+        <div className="flex justify-center items-start w-4/5 mx-auto">
           {Object.keys(columns).map((columnId) => (
             <Column
               key={columnId}
