@@ -7,6 +7,11 @@ export default defineConfig((configEnv) => {
 
   return {
     plugins: [react()],
+    // base: process.env.NODE_ENV === "production" ? "/kanban-client" : "./",
+    build: {
+      outDir: "dist",
+      rollupOptions: {},
+    },
     server: {
       port: 8080,
     },

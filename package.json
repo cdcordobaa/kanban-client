@@ -1,5 +1,6 @@
 {
   "name": "kanban-client",
+  "homepage": "https://github.com/cdcordobaa/kanban-client",
   "version": "1.0.0",
   "description": "",
   "author": "Arkatechie",
@@ -28,18 +29,21 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc --noEmitOnError false && vite build",
     "test": "vitest",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "postinstall": "husky install",
-    "build:force": "tsc --noEmitOnError false && vite build"
+    "build:force": "tsc --noEmitOnError false && vite build",
+    "predeploy": "yarn build:force",
+    "deploy": "yarn predeploy && gh-pages -d dist"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.1.8",
     "@heroicons/react": "2.0.18",
     "aws-amplify": "^6.0.28",
     "axios": "^1.6.8",
+    "gh-pages": "^6.1.1",
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dnd": "^16.0.1",
