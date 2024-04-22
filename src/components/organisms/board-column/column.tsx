@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDrop } from "react-dnd";
 import { Task } from "../../../types/task";
 import TaskCardDrag from "../card/task-card-drag";
+import CreateTaskInput from "./create-task-input";
 
-const Column: React.FC<{
+interface ColumnProps {
   columnId: string;
   tasks: Task[];
   onDropTask: (taskId: string, newStatus: string) => void;
-}> = ({ columnId, tasks, onDropTask }) => {
+  onCreateTask: (title: string, columnId: string) => Promise<void>;
+}
+
+const Column: React.FC<ColumnProps> = ({
+  columnId,
+  tasks,
+  onDropTask,
+  onCreateTask,
+}) => {
   const [, drop] = useDrop(() => ({
     accept: "task",
     drop: (item: { id: string; type: string }, monitor) => {
@@ -18,6 +27,7 @@ const Column: React.FC<{
       onDropTask(item.id, columnId);
     },
   }));
+  const [isCreating, setIsCreating] = useState(false);
 
   return (
     <div ref={drop} className="bg-gray-100 p-4 w-1/3 rounded">
@@ -30,6 +40,10 @@ const Column: React.FC<{
           isEndpoint={index === 0 || index === tasks.length - 1}
         />
       ))}
+      {isCreating && (
+        <CreateTaskInput onCreate={(title) => onCreateTask(title, columnId)} />
+      )}
+      <button onClick={() => setIsCreating(!isCreating)}>Add Task</button>
     </div>
   );
 };

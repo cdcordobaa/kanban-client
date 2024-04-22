@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useFetchTasks, useUpdateTask } from "../../hooks/service/fetchTasks";
+import {
+  useCreateTask,
+  useFetchTasks,
+  useUpdateTask,
+} from "../../hooks/service/fetchTasks";
 import { Task } from "../../types/task";
 import Column from "../../components/organisms/board-column/column";
 import { statusMappingService } from "../../types/status";
 
 const Board: React.FC = () => {
-  const { tasks, loading, error } = useFetchTasks("defaultBoardId");
+  const { tasks, loading, error, refetch } = useFetchTasks("defaultBoardId");
   const { updateTask } = useUpdateTask();
+  const { createTask } = useCreateTask();
 
   const initialColumns = {
     todo: [] as Task[],
@@ -63,6 +68,21 @@ const Board: React.FC = () => {
     [columnsRef, updateTask]
   );
 
+  const handleCreateTask = useCallback(
+    async (title: string, columnId: string) => {
+      const newTask: Partial<Task> = {
+        title,
+        status: statusMappingService[columnId],
+        description: "",
+        userId: "defaultUserId",
+      };
+      await createTask(newTask);
+      await refetch();
+      // Optionally refresh tasks list here or add the new task to the state directly
+    },
+    [createTask, refetch]
+  );
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading tasks</div>;
 
@@ -75,6 +95,7 @@ const Board: React.FC = () => {
             columnId={columnId}
             tasks={columns[columnId]}
             onDropTask={onDropTask}
+            onCreateTask={handleCreateTask}
           />
         ))}
       </div>
