@@ -10,9 +10,11 @@ import {
 import { Task } from "../../types/task";
 import Column from "../../components/organisms/board-column/column";
 import { statusMappingService } from "../../types/status";
+import { useParams } from "react-router-dom";
 
 const Board: React.FC = () => {
-  const { tasks, loading, error, refetch } = useFetchTasks("defaultBoardId");
+  const { boardId } = useParams<{ boardId: string }>();
+  const { tasks, loading, error, refetch } = useFetchTasks(boardId);
   const { updateTask } = useUpdateTask();
   const { createTask } = useCreateTask();
   const { deleteTask } = useDeleteTask();
