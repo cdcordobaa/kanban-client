@@ -8,11 +8,7 @@ interface UserDetailsProps {
   onClose: () => void;
 }
 
-const UserDetails: React.FC<UserDetailsProps> = ({
-  userId,
-  boards,
-  onClose,
-}) => {
+const UserDetails: React.FC<UserDetailsProps> = ({ userId, boards }) => {
   const { user, loading, error, refetch } = useFetchUser(userId);
   const { updateUser } = useUpdateUser();
 

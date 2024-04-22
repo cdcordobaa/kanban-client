@@ -1,5 +1,4 @@
 import { useDeleteUser } from "hooks/service/fetchUser";
-import React from "react";
 import { forwardRef, ComponentProps } from "react";
 import { User } from "types/user-board";
 

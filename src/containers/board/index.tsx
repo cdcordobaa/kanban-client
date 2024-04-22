@@ -58,11 +58,13 @@ const Board: React.FC = () => {
       });
 
       if (movedTask) {
-        const backendStatus =
-          statusMappingService[newStatus as keyof typeof statusMappingService];
+        const backendStatus = statusMappingService[
+          newStatus as keyof typeof statusMappingService
+        ] as Task["status"];
         const updatedTask: Task = { ...movedTask, status: backendStatus };
-        const updatedTasks = [
-          ...(newColumns[newStatus as keyof typeof newColumns] || []),
+        const updatedTasks: Task[] = [
+          ...((newColumns[newStatus as keyof typeof newColumns] ||
+            []) as Task[]),
           updatedTask,
         ];
         newColumns = { ...newColumns, [newStatus]: updatedTasks };

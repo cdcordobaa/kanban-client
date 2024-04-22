@@ -69,7 +69,7 @@ const TaskDetails: React.FC = () => {
       try {
         await updateTask({
           ...task,
-          status: newStatus,
+          status: newStatus as "Todo" | "In Progress" | "Done",
         });
       } catch (error) {
         console.error("Failed to update task status", error);
