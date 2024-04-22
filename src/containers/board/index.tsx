@@ -3,6 +3,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {
   useCreateTask,
+  useDeleteTask,
   useFetchTasks,
   useUpdateTask,
 } from "../../hooks/service/fetchTasks";
@@ -14,6 +15,7 @@ const Board: React.FC = () => {
   const { tasks, loading, error, refetch } = useFetchTasks("defaultBoardId");
   const { updateTask } = useUpdateTask();
   const { createTask } = useCreateTask();
+  const { deleteTask } = useDeleteTask();
 
   const initialColumns = {
     todo: [] as Task[],
@@ -83,6 +85,11 @@ const Board: React.FC = () => {
     [createTask, refetch]
   );
 
+  const handleDeleteTask = async (taskId: string) => {
+    await deleteTask(taskId);
+    await refetch(); // Refetch tasks list after deletion
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading tasks</div>;
 
@@ -96,6 +103,7 @@ const Board: React.FC = () => {
             tasks={columns[columnId]}
             onDropTask={onDropTask}
             onCreateTask={handleCreateTask}
+            onDeleteTask={handleDeleteTask}
           />
         ))}
       </div>

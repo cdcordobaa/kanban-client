@@ -7,7 +7,8 @@ const TaskCardDrag: React.FC<{
   task: Task;
   index: number;
   isEndpoint: boolean;
-}> = ({ task }) => {
+  onDelete: (taskId: string) => Promise<void>;
+}> = ({ task, onDelete }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
     item: { id: task.id },
@@ -16,9 +17,16 @@ const TaskCardDrag: React.FC<{
     }),
   }));
 
+  const handleDelete = () => {
+    onDelete(task.id);
+  };
+
   return (
     <div ref={drag} className={`opacity-${isDragging ? 50 : 100}`}>
       <TaskCard task={task} />
+      <button onClick={handleDelete} className="delete-button">
+        X
+      </button>
     </div>
   );
 };

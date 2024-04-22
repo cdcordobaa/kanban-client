@@ -57,3 +57,15 @@ export const useCreateTask = () => {
 
   return { createTask };
 };
+
+export const useDeleteTask = () => {
+  const deleteTask = useCallback(async (taskId: string) => {
+    try {
+      await api.delete(`/tasks/${taskId}`);
+    } catch (error) {
+      console.error("Failed to delete task", error);
+    }
+  }, []);
+
+  return { deleteTask };
+};

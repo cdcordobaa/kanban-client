@@ -9,6 +9,7 @@ interface ColumnProps {
   tasks: Task[];
   onDropTask: (taskId: string, newStatus: string) => void;
   onCreateTask: (title: string, columnId: string) => Promise<void>;
+  onDeleteTask: (taskId: string) => Promise<void>;
 }
 
 const Column: React.FC<ColumnProps> = ({
@@ -16,6 +17,7 @@ const Column: React.FC<ColumnProps> = ({
   tasks,
   onDropTask,
   onCreateTask,
+  onDeleteTask,
 }) => {
   const [, drop] = useDrop(() => ({
     accept: "task",
@@ -38,6 +40,7 @@ const Column: React.FC<ColumnProps> = ({
           task={task}
           index={index}
           isEndpoint={index === 0 || index === tasks.length - 1}
+          onDelete={onDeleteTask}
         />
       ))}
       {isCreating && (
