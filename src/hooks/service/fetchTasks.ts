@@ -1,30 +1,39 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../../config/api";
 import { Task } from "../../types/task";
-import { User } from "../../types/user";
-import { Comment } from "../../types/comment";
 
 export const useFetchTasks = (boardId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchTasks = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await api.get(`/tasks?boardId=${boardId}`);
-      setTasks(Array.isArray(response.data.tasks) ? response.data.tasks : []);
-    } catch (err) {
-      console.error(err);
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [boardId, setLoading]);
+  const fetchTasks = useCallback(
+    async (retryCount = 0) => {
+      setLoading(true);
+      try {
+        const response = await api.get(`/tasks?boardId=${boardId}`);
+        setTasks(Array.isArray(response.data.tasks) ? response.data.tasks : []);
+      } catch (err) {
+        if (err.code === "ERR_NETWORK") {
+          console.error("Network Error", err);
+          if (retryCount < 5) {
+            console.log(`Retrying... Attempt ${retryCount + 1}`);
+            fetchTasks(retryCount + 1);
+            return;
+          }
+        }
+        console.error(err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [boardId]
+  );
 
   useEffect(() => {
     fetchTasks();
-  }, [boardId, fetchTasks]);
+  }, [fetchTasks]);
 
   return { tasks, loading, error, refetch: fetchTasks };
 };
