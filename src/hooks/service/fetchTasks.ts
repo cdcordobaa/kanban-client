@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../../config/api";
 import { Task } from "../../types/task";
+import { User } from "../../types/user";
+import { Comment } from "../../types/comment";
 
 export const useFetchTasks = (boardId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
