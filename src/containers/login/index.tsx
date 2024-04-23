@@ -7,7 +7,7 @@ import {
   getCurrentUser,
   fetchAuthSession,
 } from "aws-amplify/auth";
-import { useAuth } from "../../hooks/business/auth"; // Import useAuth
+import { useAuth } from "../../hooks/business/auth"; 
 
 const Login: React.FC = () => {
   const [isLoginView, setIsLoginView] = useState(true);

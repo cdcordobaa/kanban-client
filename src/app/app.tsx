@@ -1,10 +1,10 @@
-import React, { useContext } from "react"; // Import useContext
+import React, { useContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Board from "../containers/board";
 import BoardGallery from "../containers/board-gallery";
 import TaskDetails from "../containers/task-details";
 import Login from "../containers/login";
-import { ProvideAuth, AuthContext } from "../hooks/business/auth"; // Import AuthContext
+import { ProvideAuth, AuthContext } from "../hooks/business/auth";
 
 const App: React.FC = () => {
   return (

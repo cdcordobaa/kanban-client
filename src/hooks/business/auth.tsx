@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import api from "../../config/api";
+// import api from "../../config/api";
 
 interface AuthContextType {
   user: any;
@@ -28,10 +28,10 @@ const useProvideAuth = (): AuthContextType => {
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
-      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      // api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     } else {
       localStorage.removeItem("accessToken");
-      delete api.defaults.headers.common["Authorization"];
+      // delete api.defaults.headers.common["Authorization"];
     }
   }, [accessToken]);
 

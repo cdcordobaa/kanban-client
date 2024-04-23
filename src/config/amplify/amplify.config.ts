@@ -1,6 +1,5 @@
 import { ResourcesConfig } from "aws-amplify";
 
-// Importing environment variables
 const apiUrl = import.meta.env.VITE_GATEWAY_API_URL;
 const region = import.meta.env.VITE_AWS_REGION;
 const userPoolId = import.meta.env.VITE_AWS_USER_POOL_ID;
